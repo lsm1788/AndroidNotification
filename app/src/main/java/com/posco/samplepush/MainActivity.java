@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         // Log and toast
                         @SuppressLint({"StringFormatInvalid", "LocalSuppress"})
                         String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d(TAG, msg);
+                        Log.d(TAG, token);
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -173,13 +173,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
     // Notification Builder를 만드는 메소드
-    private NotificationCompat.Builder getNotificationBuilder(String contents) {
+    private NotificationCompat.Builder getNotificationBuilder(String contents, String title, String body) {
 
-        NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
-                .setContentTitle("메세지 알림")
-                .setContentText(contents)
-                .setSmallIcon(R.drawable.ic_android);
-        return notifyBuilder;
+//        Log.d("debug", contents+"");
+//        Log.d("debug", title+"");
+//        Log.d("debug", body+"");
+        if(contents == null){
+            NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
+                    .setContentTitle("FCM에서 보낸 메세지 제목 : " + title)
+                    .setContentText(body)
+                    .setSmallIcon(R.drawable.ic_android);
+            return notifyBuilder;
+        } else if(title == null || body == null){
+            NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
+                    .setContentTitle("애뮬레이터에서 보낸메세지")
+                    .setContentText(contents)
+                    .setSmallIcon(R.drawable.ic_android);
+            return notifyBuilder;
+        }
+//        NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
+//                .setContentTitle("메세지 제목 : " + title)
+//                .setContentText("애뮬레이터 메세지 : " + contents + "  FCM 메세지 : " + body)
+//                .setSmallIcon(R.drawable.ic_android);
+//        return notifyBuilder;
+        return null;
     }
 
     @Override
@@ -193,18 +210,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void processIntent(Intent intent){
         String from = intent.getStringExtra("from");
-        if (from == null){
-
+        String contents = intent.getStringExtra("contents");
+        String title = intent.getStringExtra("title");
+        String body = intent.getStringExtra("body");
+        if(from == null){
             return;
         }
-        String contents = intent.getStringExtra("contents");
+//        if (from == null){
+//            contents = null;
+//            sendNotification(contents, title, body);
+//        } else if(from != null){
+//            title = null;
+//            body = null;
+//            sendNotification(contents, title, body);
+//
+//        }
+        sendNotification(contents, title, body);
 
-
-        sendNotification(contents);
+//        sendNotification(contents, title, body);
     }
-    public void sendNotification(String contents){
+    public void sendNotification(String contents, String title, String body){
         // Builder 생성
-        NotificationCompat.Builder notifyBuilder = getNotificationBuilder(contents);
+        NotificationCompat.Builder notifyBuilder = getNotificationBuilder(contents, title, body);
         // Manager를 통해 notification 디바이스로 전달
         mNotificationManager.notify(NOTIFICATION_ID,notifyBuilder.build());
     }

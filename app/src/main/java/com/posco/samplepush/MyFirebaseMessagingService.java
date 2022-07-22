@@ -43,22 +43,45 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.e(TAG, "onNewToken 호출됨" + token);
     }
 
+
+
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage){     //수신한 메세지를 처리
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage){     //수신한 메세지를 처리
         Log.d(TAG, "onMessageReceived() 호출됨.");
-
         String from = remoteMessage.getFrom();
-        Map<String, String> data = remoteMessage.getData();
-        String contents = data.get("contents");
+        if (remoteMessage.getData().size() > 0) {
+            Map<String, String> data = remoteMessage.getData();
+            String contents = data.get("contents");
+            sendToActivity(getApplicationContext(), from, contents, null, null);
+        }
 
-        Log.d(TAG, "from : " + from + ", contents : " + contents);
-        sendToActivity(getApplicationContext(), from, contents);
+        if (remoteMessage.getNotification() != null) {
+            String title = remoteMessage.getNotification().getTitle();
+            String body = remoteMessage.getNotification().getBody();
+            sendToActivity(getApplicationContext(), from, null, title, body);
+        }
+
+//        String from = remoteMessage.getFrom();
+
+//        String title = remoteMessage.getNotification().getTitle();
+//        String body = remoteMessage.getNotification().getBody();
+
+//        Map<String, String> data = remoteMessage.getData();
+
+//        String title = data.get("title");
+//        String body = data.get("body");
+
+//        String contents = data.get("contents");
+
+//        Log.d(TAG, "from : " + from + ", contents : " + contents + ", title : " + title + ", body : " + body);
+//        sendToActivity(getApplicationContext(), from, contents, title, body);
     }
-    private void sendToActivity(Context context, String from, String contents){
+    private void sendToActivity(Context context, String from, String contents, String title, String body){
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("from", from);
         intent.putExtra("contents", contents);
-
+        intent.putExtra("title", title);
+        intent.putExtra("body", body);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         context.startActivity(intent);
