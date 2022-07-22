@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "839042378569",
+    "project_id": "samplepush-d0ff9",
+    "storage_bucket": "samplepush-d0ff9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839042378569:android:2cdb9cef7b6b78c7540898",
+        "android_client_info": {
+          "package_name": "com.posco.samplepush"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "839042378569-i5849vken8dp7ilg6db98qf5drhv390k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArdihG5n27tPOQmu8WL7VhVV26PPhqCPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "839042378569-i5849vken8dp7ilg6db98qf5drhv390k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
